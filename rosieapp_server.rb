@@ -1,4 +1,5 @@
 require 'sinatra'
+require 'sinatra/reloader'
 require 'octokit'
 require 'dotenv/load' # Manages environment variables
 require 'json'
@@ -6,6 +7,7 @@ require 'openssl'     # Verifies the webhook signature
 require 'jwt'         # Authenticates a GitHub App
 require 'time'        # Gets ISO 8601 representation of a Time object
 require 'logger'      # Logs debug statements
+require 'pathname'    # Works with file paths
 
 set :port, 3000
 set :bind, '0.0.0.0'
@@ -57,20 +59,123 @@ class GHAapp < Sinatra::Application
 
 
   post '/event_handler' do
+    # Get the event type from the HTTP_X_GITHUB_EVENT header
+    case request.env['HTTP_X_GITHUB_EVENT']
 
-    # # # # # # # # # # # #
-    # ADD YOUR CODE HERE  #
-    # # # # # # # # # # # #
+    when 'check_suite'
+      # A new check_suite has been created. Create a new check run with status queued
+      if @payload['action'] === 'requested' || @payload['action'] === 'rerequested'
+         create_check_run
+      end
 
+     when 'check_run'
+      # Check that the event is being sent to this app
+      if @payload['check_run']['app']['id'].to_s === APP_IDENTIFIER
+        case @payload['action']
+        when 'created'
+          initiate_check_run
+        when 'rerequested'
+          create_check_run
+        end
+      end
+    end
     200 # success status
   end
 
 
   helpers do
 
-    # # # # # # # # # # # # # # # # #
-    # ADD YOUR HELPER METHODS HERE  #
-    # # # # # # # # # # # # # # # # #
+    # Create a new check run with the status queued
+    def create_check_run
+      # At the time of writing, Octokit does not support the Checks API, but
+      # it does provide generic HTTP methods you can use:
+      # https://developer.github.com/v3/checks/runs/#create-a-check-run
+      check_run = @installation_client.post(
+        "repos/#{@payload['repository']['full_name']}/check_runs",
+        {
+          # This header allows for beta access to Checks API
+          accept: 'application/vnd.github.antiope-preview+json',
+          # The name of your check run.
+          name: 'RosiePi',
+          # The payload structure differ depending on whether a check run or
+          # check suite event occurred.
+          head_sha: @payload['check_run'].nil? ? @payload['check_suite']['head_sha'] : @payload['check_run']['head_sha']
+          # TODO: add external_id from redis
+        }
+      )
+
+      # You requestsed the creation of a check run from GitHub. Now, you'll wait
+      # to get confirmation from GitHub, in the form of a webhook that it was
+      # created before starting CI. Equivalently, a 201 response from POST
+      # POST /resos/:owner/:repo/check-runs could also be used as confirmation.
+    end
+
+    # Start the CI process
+    def initiate_check_run
+      # Once the check run is created, you'll update the status of the check run
+      # to 'in_progress' and run the CI process. When the CI finishes, you'll
+      # update the check run status to 'completed' and add the CI results.
+
+      # At the time of writing, Octokit does not support the Checks API, but
+      # it does provide generic HTTP methods you can use:
+      # https://developer.github.com/v3/checks/runs/#create-a-check-run
+      updated_check_run = @installation_client.patch(
+        "repos/#{@payload['repository']['full_name']}/check-runs/#{@payload['check_run']['id']}",
+        {
+          accept: 'application/vnd.github.antiope-preview+json',
+          name: 'RosiePi',
+          status: 'in_progress',
+          started_at: Time.now.utc.iso8601
+        }
+      )
+
+      # *** RUN A CI TEST ***
+      # Ideally this would be performed async, so you could return immediately.
+      # But for now you'll do a simulated process syncronously, and update
+      # the check run right here.
+      full_repo_name  = @payload['repository']['full_name']
+      repository      = @payload['repository']['name']
+      head_sha        = @payload['check_run']['head_sha']
+
+      # Ensure rosiepi is installed
+      rosiepi = `pip show rosiepi`
+      if rosiepi.length() > 0
+        `pip install -U --user rosiepi`
+      else
+        `pip install --user rosiepi`
+      end
+
+      @app_path = Pathname.pwd + "rosieapp/run_rosie.py"
+      @report = `python3 #{@app_path} #{head_sha}'`
+      logger.debug @report
+      @output = JSON.parse @report
+      annotations = []
+      # You can create a maximum of 50 annotations per request to the Checks
+      # API. To add more than 50 annotations, use the "Update a check run" API
+      # endpoint. This example code limits the number of annotations to 50.
+      # see https://developer.github.com/v3/checks/runs/#update-a-check-run
+      # for details.
+      max_annotations = 1
+
+      # Mark the check run as complete!
+      updated_check_run = @installation_client.patch(
+        "repos/#{@payload['repository']['full_name']}/check-runs/#{@payload['check_run']['id']}",
+        {
+          accept: 'application/vnd.github.antiope-preview+json',
+          name: 'RosiePi',
+          conclusion: "#{@output['conclusion']}",
+          completed_at: "#{@output['completed_at']}",
+          output: {
+            title: "#{@output['output']['title']}",
+            summary: "#{@output['output']['summary']}",
+            text: "#{@output['output']['text']}"
+          }
+        }
+      )
+      #puts "foo"
+    end
+
+
 
     # Saves the raw payload and converts the payload to JSON format
     def get_payload_request(request)
