@@ -68,6 +68,3 @@ DEPENDENCIES
   rerun
   sinatra (~> 2.0)
   sinatra-contrib
-
-BUNDLED WITH
-   1.17.1
