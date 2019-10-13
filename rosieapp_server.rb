@@ -64,10 +64,10 @@ class GHAapp < Sinatra::Application
 
   get '/status' do
     "Good day!"
-    "Your IP: #{request.ip}"
-    "Your User Agent: #{request.user_agent}"
-    server_status()
-    200
+    "Your IP: #{@request.ip}"
+    "Your User Agent: #{@request.user_agent}"
+    @status = server_status()
+    "Server Status: #{@status}"
   end
 
   post '/event_handler' do
@@ -103,7 +103,6 @@ class GHAapp < Sinatra::Application
       @report = `python3 #{@app_path}`
       logger.debug @report
       @output = JSON.parse @report
-      "#{@output}"
     end
 
     # Create a new check run with the status queued
