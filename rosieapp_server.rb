@@ -103,11 +103,7 @@ class GHAapp < Sinatra::Application
       @report = `python3 #{@app_path}`
       logger.debug @report
       @output = JSON.parse @report
-
-      @page_title = "RosiePi Status"
-      @page_id = "status.html"
-
-      erb :"status.html"
+      "#{@output}"
     end
 
     # Create a new check run with the status queued
