@@ -11,6 +11,7 @@ require 'pathname'    # Works with file paths
 
 set :port, 3000
 set :bind, '0.0.0.0'
+set :views, settings.root + "/erb"
 
 
 # This is template code to create a GitHub App server.
@@ -68,7 +69,7 @@ class GHAapp < Sinatra::Application
     @status_server_time = @status["server"]["system_time"]
     @status_server_uptime = @status["server"]["uptime"]
 
-    erb :status, :layout_options => {set :views, settings.root + "/erb"}
+    erb :status
   end
 
   post '/event_handler' do
