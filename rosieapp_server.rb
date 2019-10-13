@@ -63,11 +63,13 @@ class GHAapp < Sinatra::Application
   end
 
   get '/status' do
-    "Good day!"
-    "Your IP: #{@request.ip}"
-    "Your User Agent: #{@request.user_agent}"
+    set :views, settings.root + "/erb"
+
     @status = server_status()
-    "Server Status: #{@status}"
+    @status_server_time = @status["server"]["system_time"]
+    @status_server_uptime = @status["server"]["uptime"]
+
+    erb :status
   end
 
   post '/event_handler' do
