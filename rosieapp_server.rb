@@ -58,6 +58,10 @@ class GHAapp < Sinatra::Application
   end
 
 
+  get '/' do
+    redirect to('/status')
+  end
+
   get '/status' do
     "Good day!"
     "Your IP: #{request.ip}"
