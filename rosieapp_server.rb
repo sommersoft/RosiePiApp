@@ -58,6 +58,14 @@ class GHAapp < Sinatra::Application
   end
 
 
+  get '/status' do
+    "Good day!"
+    "Your IP: #{request.ip}"
+    "Your User Agent: #{request.user_agent}"
+    server_status()
+    200
+  end
+
   post '/event_handler' do
     # Get the event type from the HTTP_X_GITHUB_EVENT header
     case request.env['HTTP_X_GITHUB_EVENT']
@@ -84,6 +92,13 @@ class GHAapp < Sinatra::Application
 
 
   helpers do
+
+    def server_status
+      @app_path = Pathname.pwd + "rosieapp/app_status.py"
+      @report = `python3 #{@app_path}'`
+      logger.debug @report
+      @output = JSON.parse @report
+    end
 
     # Create a new check run with the status queued
     def create_check_run
