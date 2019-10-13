@@ -100,7 +100,7 @@ class GHAapp < Sinatra::Application
     def server_status
       @app_path = Pathname.pwd + "rosieapp/app_status.py"
       logger.debug "server_status app_path: #{@app_path}"
-      @report = `python3 #{@app_path}'`
+      @report = `python3 #{@app_path}`
       logger.debug @report
       @output = JSON.parse @report
     end
@@ -166,7 +166,7 @@ class GHAapp < Sinatra::Application
       end
 
       @app_path = Pathname.pwd + "rosieapp/run_rosie.py"
-      @report = `python3 #{@app_path} #{head_sha}'`
+      @report = `python3 #{@app_path} #{head_sha}`
       logger.debug @report
       @output = JSON.parse @report
       annotations = []
