@@ -11,7 +11,7 @@ require 'pathname'    # Works with file paths
 
 set :port, 3000
 set :bind, '0.0.0.0'
-set :views, settings.root + "/erb"
+set :views, settings.root + "/erb/views"
 
 
 # This is template code to create a GitHub App server.
