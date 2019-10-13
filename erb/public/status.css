@@ -1,0 +1,13 @@
+div#status {
+    width: 70%;
+}
+
+table#server1 {
+    width: inherit;
+    background-color: #f1f1c1
+}
+
+table#server1 th {
+    font-size: 6;
+    font-weight: bolder;
+}

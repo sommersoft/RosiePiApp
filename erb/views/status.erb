@@ -29,19 +29,21 @@
         <title>RosiePi Server Status</title>
     </head>
     <body>
-        <table>
-            <tr>
-                <th>Item</th>
-                <th>Status</th>
-            </tr>
-            <tr>
-                <td>Server Time</td>
-                <td><%= @status_server_time %></td>
-            </tr>
-            <tr>
-                <td>Server Uptime</td>
-                <td><%= @status_server_uptime %></td>
-            </tr>
-        </table>
+        <div class="status">
+            <table id="server1">
+                <tr>
+                    <th>Item</th>
+                    <th>Status</th>
+                </tr>
+                <tr>
+                    <td>Server Time</td>
+                    <td><%= @status_server_time %></td>
+                </tr>
+                <tr>
+                    <td>Server Uptime</td>
+                    <td><%= @status_server_uptime %></td>
+                </tr>
+            </table>
+        </div>
     </body>
 </html>
