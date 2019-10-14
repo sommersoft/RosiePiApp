@@ -24,7 +24,7 @@
     width: 30%;
 }
 
-.status-lable, .status-value {
+.status-label, .status-value {
     align-self: center;
     background-color: #754F93;
     border-left-color: #E90E8B;
