@@ -80,7 +80,9 @@ class GHAapp < Sinatra::Application
     when 'check_suite'
       # A new check_suite has been created. Create a new check run with status queued
       if @payload['action'] === 'requested' || @payload['action'] === 'rerequested'
-         create_check_run
+        if @payload['check_suite']['app']['id'].to_s = APP_IDENTIFIER
+          create_check_run
+        end
       end
 
      when 'check_run'
@@ -102,7 +104,6 @@ class GHAapp < Sinatra::Application
 
     def server_status
       @app_path = Pathname.pwd + "rosieapp/app_status.py"
-      logger.debug "server_status app_path: #{@app_path}"
       @report = `python3 #{@app_path}`
       logger.debug @report
       @output = JSON.parse @report
