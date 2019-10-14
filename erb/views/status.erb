@@ -6,21 +6,27 @@
         <link rel="stylesheet" href="status.css">
     </head>
     <body>
-        <div class="status">
-            <table id="server1">
-                <tr>
-                    <th>Item</th>
-                    <th>Status</th>
-                </tr>
-                <tr>
-                    <td>Server Time</td>
-                    <td><%= @status_server_time %></td>
-                </tr>
-                <tr>
-                    <td>Server Uptime</td>
-                    <td><%= @status_server_uptime %></td>
-                </tr>
-            </table>
+        <div class="wrapper">
+            <div class="left-box">
+            </div>
+            <div class="status">
+                <table id="server1">
+                    <tr>
+                        <th>Item</th>
+                        <th>Status</th>
+                    </tr>
+                    <tr>
+                        <td>Server Time</td>
+                        <td><%= @status_server_time %></td>
+                    </tr>
+                    <tr>
+                        <td>Server Uptime</td>
+                        <td><%= @status_server_uptime %></td>
+                    </tr>
+                </table>
+            </div>
+            <div class="right-box">
+            </div>
         </div>
     </body>
 </html>

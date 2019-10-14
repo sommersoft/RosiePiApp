@@ -1,13 +1,28 @@
-div#status {
-    width: 70%;
+
+.wrapper {
+    display: flex;
+    align-items: flex-end;
+}
+
+.left-box {
+    align-self: stretch;
+    background-color: #652F8F;
+    border-color: #E90E8B;
+}
+
+.right-box {
+    align-self: stretch;
+    background-color: #652F8F;
+    border-color: #E90E8B;
 }
 
 table#server1 {
     width: inherit;
-    background-color: #f1f1c1
+    background-color: #C9C9C9;
 }
 
 table#server1 th {
-    font-size: 6;
+    font-size: 4rem;
     font-weight: bolder;
+    border-color: 40347B;
 }
