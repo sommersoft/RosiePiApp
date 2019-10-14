@@ -7,7 +7,8 @@ body {
     background-color: #652F8F;
     color: #997BB1;
     font-size: -webkit-xxx-large;
-    align-self: center;
+    font-family:monospace;
+    text-align: center;
 }
 
 .wrapper {
@@ -34,8 +35,7 @@ body {
     align-self: center;
     background-color: #754F93;
     width: 20%;
-    padding: 3px;
-    color: white;
+    font-family:monospace;
 }
 
 .status-label {
@@ -48,10 +48,13 @@ body {
 table#server1 {
     width: 100%;
     background-color: #754F93;
+    padding: 3px;
+    color: bisque;
 }
 
 table#server1 td {
     color: #ffe4c4;
     font: -webkit-control;
+    width: 100%;
 
 }
