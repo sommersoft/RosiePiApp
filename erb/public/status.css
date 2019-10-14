@@ -2,18 +2,28 @@
 .wrapper {
     display: flex;
     align-items: flex-end;
+    flex-direction: row;
 }
 
 .left-box {
     align-self: stretch;
     background-color: #652F8F;
     border-color: #E90E8B;
+    width: 20%;
 }
 
 .right-box {
     align-self: stretch;
     background-color: #652F8F;
     border-color: #E90E8B;
+    width: 20%;
+}
+
+.status {
+    align-self: stretch;
+    background-color: #C9C9C9;
+    border-color: #E90E8B;
+    width: 60%;
 }
 
 table#server1 {
