@@ -4,8 +4,10 @@ body {
 }
 
 .header {
-    align-items: center;
     background-color: #652F8F;
+    color: #997BB1;
+    font-size: -webkit-xxx-large;
+    align-self: center;
 }
 
 .wrapper {
@@ -31,7 +33,7 @@ body {
 .status-label, .status-value {
     align-self: center;
     background-color: #754F93;
-    width: 19%;
+    width: 20%;
     padding: 3px;
     color: white;
 }
@@ -39,20 +41,16 @@ body {
 .status-label {
     text-align: right;
     border-right-color: #E90E8B;
-    border-style: solid;
-    border-width: thin;
+    border-right-style: solid;
+    border-right-width: thin;
 }
 
 table#server1 {
     width: 100%;
     background-color: #754F93;
-    border-color: #754F93;
-    border-style: solid;
 }
 
 table#server1 td {
-    border-color: #270640;
-    border-style: solid;
     color: #ffe4c4;
     font: -webkit-control;
 
