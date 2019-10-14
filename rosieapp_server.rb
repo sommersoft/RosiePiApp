@@ -80,7 +80,7 @@ class GHAapp < Sinatra::Application
     when 'check_suite'
       # A new check_suite has been created. Create a new check run with status queued
       if @payload['action'] === 'requested' || @payload['action'] === 'rerequested'
-        if @payload['check_suite']['app']['id'].to_s = APP_IDENTIFIER
+        if @payload['check_suite']['app']['id'].to_s === APP_IDENTIFIER
           create_check_run
         end
       end
