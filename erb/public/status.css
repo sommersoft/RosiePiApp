@@ -9,30 +9,35 @@
     align-self: stretch;
     background-color: #652F8F;
     border-color: #E90E8B;
-    width: 20%;
+    width: 30%;
 }
 
 .right-box {
     align-self: stretch;
     background-color: #652F8F;
     border-color: #E90E8B;
-    width: 20%;
+    width: 30%;
 }
 
 .status {
-    align-self: stretch;
-    background-color: #C9C9C9;
-    border-color: #E90E8B;
-    width: 60%;
+    align-self: center;
+    background-color: #754F93;
+    border-left-color: #E90E8B;
+    border-right-color: #E90E8B;
+    border-style: solid;
+    border-width: thin;
+    width: 40%;
 }
 
 table#server1 {
-    width: inherit;
-    background-color: #C9C9C9;
+    width: 100%;
+    background-color: #754F93;
+    border-color: #754F93;
+    border-style: solid;
 }
 
-table#server1 th {
-    font-size: 4rem;
-    font-weight: bolder;
-    border-color: 40347B;
+table#server1 td {
+    border-color: #270640;
+    border-style: solid;
+
 }
