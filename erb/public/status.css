@@ -1,4 +1,8 @@
 
+body {
+    background-color: #652F8F;
+}
+
 .header {
     align-items: center;
     background-color: #652F8F;
@@ -27,16 +31,14 @@
 .status-label, .status-value {
     align-self: center;
     background-color: #754F93;
-    border-left-color: #E90E8B;
-    border-right-color: #E90E8B;
-    border-style: solid;
-    border-width: thin;
     width: 19%;
+    padding: 3px;
+    color: white;
 }
 
-.status-split {
-    width: 1%;
-    border-left-color: #E90E8B;
+.status-label {
+    text-align: right;
+    border-right-color: #E90E8B;
     border-style: solid;
     border-width: thin;
 }
