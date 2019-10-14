@@ -1,4 +1,9 @@
 
+.header {
+    align-items: center;
+    background-color: #652F8F;
+}
+
 .wrapper {
     display: flex;
     align-items: flex-end;
@@ -19,14 +24,21 @@
     width: 30%;
 }
 
-.status {
+.status-lable, .status-value {
     align-self: center;
     background-color: #754F93;
     border-left-color: #E90E8B;
     border-right-color: #E90E8B;
     border-style: solid;
     border-width: thin;
-    width: 40%;
+    width: 19%;
+}
+
+.status-split {
+    width: 1%;
+    border-left-color: #E90E8B;
+    border-style: solid;
+    border-width: thin;
 }
 
 table#server1 {
@@ -39,5 +51,7 @@ table#server1 {
 table#server1 td {
     border-color: #270640;
     border-style: solid;
+    color: #ffe4c4;
+    font: -webkit-control;
 
 }
