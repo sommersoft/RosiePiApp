@@ -81,7 +81,10 @@ class GHAapp < Sinatra::Application
       # A new check_suite has been created. Create a new check run with status queued
       if @payload['action'] === 'requested' || @payload['action'] === 'rerequested'
         if @payload['check_suite']['app']['id'].to_s === APP_IDENTIFIER
+          logger.debug "check_suite is for rosiepi. creating run. suite id: #{@payload['check_suite']['id']}"
           create_check_run
+        else
+          logger.debug "check_suite is not for rosiepi. app name: #{@payload['app']['name']}"
         end
       end
 
