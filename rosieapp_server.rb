@@ -119,7 +119,7 @@ class GHAapp < Sinatra::Application
       # it does provide generic HTTP methods you can use:
       # https://developer.github.com/v3/checks/runs/#create-a-check-run
       check_run = @installation_client.post(
-        "repos/#{@payload['repository']['full_name']}/check_runs",
+        "repos/#{@payload['repository']['full_name']}/check-runs",
         {
           # This header allows for beta access to Checks API
           accept: 'application/vnd.github.antiope-preview+json',
