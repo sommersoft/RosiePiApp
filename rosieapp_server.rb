@@ -81,16 +81,17 @@ class GHAapp < Sinatra::Application
       # A new check_suite has been created. Create a new check run with status queued
       if @payload['action'] === 'requested' || @payload['action'] === 'rerequested'
         if @payload['check_suite']['app']['id'].to_s === APP_IDENTIFIER
-          logger.debug "check_suite is for rosiepi. creating run. suite id: #{@payload['check_suite']['id']}"
+          logger.debug "processing new check_suite. creating run. suite id: #{@payload['check_suite']['id']}"
           create_check_run
         else
-          logger.debug "check_suite is not for rosiepi. app name: #{@payload['app']['name']}"
+          logger.debug "ignoring check_suite request from: #{@payload['check_suite']['app']['name']}"
         end
       end
 
      when 'check_run'
       # Check that the event is being sent to this app
       if @payload['check_run']['app']['id'].to_s === APP_IDENTIFIER
+        logger.debug "processing new check_run. check_run id: #{@payload['check_run']['id']}"
         case @payload['action']
         when 'created'
           initiate_check_run
@@ -164,13 +165,13 @@ class GHAapp < Sinatra::Application
       repository      = @payload['repository']['name']
       head_sha        = @payload['check_run']['head_sha']
 
-      # Ensure rosiepi is installed
-      rosiepi = `pip show rosiepi`
-      if rosiepi.length() > 0
-        `pip install -U --user rosiepi`
-      else
-        `pip install --user rosiepi`
-      end
+      # Ensure rosiepi is installed (disabled for now)
+      #rosiepi = `pip show rosiepi`
+      #if rosiepi.length() > 0
+      #  `pip install -U rosiepi`
+      #else
+      #  `pip install rosiepi`
+      #end
 
       @app_path = Pathname.pwd + "rosieapp/run_rosie.py"
       @report = `python3 #{@app_path} #{head_sha}`
