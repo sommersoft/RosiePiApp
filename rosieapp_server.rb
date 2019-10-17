@@ -173,7 +173,7 @@ class GHAapp < Sinatra::Application
       #  `pip install rosiepi`
       #end
 
-      @app_path = Pathname.pwd + "rosieapp/run_rosie.py"
+      @app_path = Pathname.pwd + "rosieapp/run_rosiepi.py"
       @report = `python3 #{@app_path} #{head_sha}`
       logger.debug @report
       @output = JSON.parse @report
