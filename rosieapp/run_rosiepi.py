@@ -24,7 +24,7 @@
 import argparse
 import datetime
 import json
-from rosiepi.rosie import test_controller
+from rosiepi.rosie import find_circuitpython, test_controller
 
 cli_parser = argparse.ArgumentParser(description="RosieApp")
 cli_parser.add_argument(
