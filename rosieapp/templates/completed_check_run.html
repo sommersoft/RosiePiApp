@@ -1,0 +1,46 @@
+{%- if outcome in ['Error', 'Failed'] %}
+    {%- set outcome_color = "color:red" %}
+{%- else %}
+    {%- set outcome_color = "color:green" %}
+{%- endif %}
+<table style="border: thin solid;width:100%;padding: 1px 3px;font-family:sans-serif;border-collapse:collapse">
+    <tr>
+        <th style="border: thin solid;width:17%;">
+            Board
+        </th>
+        <th style="border: thin solid;width:10%">
+            Result
+        </th>
+        <th style="border: thin solid;text-align:left;padding: 1px 5px">
+            Log
+        </th>
+    </tr>
+    <tr>
+        <td style="border: thin solid;vertical-align:top;text-align:center">
+            {{ board_name }}
+        </td>
+        <td style="border: thin solid;vertical-align:top;text-align:center;border-color:black;{{ outcome_color }}">
+            {{ outcome }}
+        </td>
+        <td>
+            <table style="border: thin solid;width:100%;padding: inherit;font-family:monospace;font-size:14;background:black;border-color:black;color:#C5C5C5;border-radius:7px">
+                {%- for item in rosie_log %}
+                {%- if item|join|length > 0 %}
+                <tr>
+                    <td {%- if loop.index < loop.length %} style="border-bottom: thin solid" {%- endif %}>
+                    {%- for sub_item in item %}
+                        {%- if sub_item.startswith(" -") %}
+                        <li style="text-indent:10px">{{ sub_item|replace(" - ", "") }}</li>
+                        {%- else %}
+                        {{ sub_item }}<br>
+                        {%- endif %}
+                    {%- endfor %}
+                    </td>
+                </tr>
+                {%- endif %}
+                {%- endfor %}
+            </table>
+        </td>
+    </tr>
+</table>
+<br>
