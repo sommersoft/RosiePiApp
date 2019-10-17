@@ -97,7 +97,7 @@ def run_rosie(commit):
             rosie_test.start_test()
         else:
             board_results["outcome"] = "Error"
-            print(rosie_test.log.getvalue())
+            #print(rosie_test.log.getvalue())
             board_results["rosie_log"] = process_rosie_log(rosie_test.log.getvalue())
             board_output_text.append(board_results)
             app_conclusion = "failure"
