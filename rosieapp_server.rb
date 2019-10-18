@@ -200,6 +200,24 @@ class GHAapp < Sinatra::Application
           }
         }
       )
+
+      # We had a failure, so update the check_run to indicate it
+    rescue => exception
+        updated_check_run = @installation_client.patch(
+          "repos/#{@payload['repository']['full_name']}/check-runs/#{@payload['check_run']['id']}",
+          {
+            accept: 'application/vnd.github.antiope-preview+json',
+            name: 'RosiePi',
+            conclusion: "neutral",
+            completed_at: Time.now.utc.iso8601,
+            output: {
+              title: "RosiePi",
+              summary: "RosiePi suffered an internal error.",
+              text: exception.message
+            }
+          }
+        )
+        raise
       #puts "foo"
     end
 
