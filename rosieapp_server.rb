@@ -174,7 +174,7 @@ class GHAapp < Sinatra::Application
       #end
 
       @app_path = Pathname.pwd + "rosieapp/run_rosiepi.py"
-      @report = `python3 #{@app_path} #{head_sha}`
+      @report = `sudo python3 #{@app_path} #{head_sha}`
       logger.debug @report
       @output = JSON.parse @report
       annotations = []
