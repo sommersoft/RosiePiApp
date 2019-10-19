@@ -165,25 +165,10 @@ class GHAapp < Sinatra::Application
       repository      = @payload['repository']['name']
       head_sha        = @payload['check_run']['head_sha']
 
-      # Ensure rosiepi is installed (disabled for now)
-      #rosiepi = `pip show rosiepi`
-      #if rosiepi.length() > 0
-      #  `pip install -U rosiepi`
-      #else
-      #  `pip install rosiepi`
-      #end
-
       @app_path = Pathname.pwd + "rosieapp/run_rosiepi.py"
       @report = `sudo python3 #{@app_path} #{head_sha}`
       logger.debug @report
       @output = JSON.parse @report
-      annotations = []
-      # You can create a maximum of 50 annotations per request to the Checks
-      # API. To add more than 50 annotations, use the "Update a check run" API
-      # endpoint. This example code limits the number of annotations to 50.
-      # see https://developer.github.com/v3/checks/runs/#update-a-check-run
-      # for details.
-      max_annotations = 1
 
       # Mark the check run as complete!
       updated_check_run = @installation_client.patch(
@@ -201,27 +186,24 @@ class GHAapp < Sinatra::Application
         }
       )
 
-      # We had a failure, so update the check_run to indicate it
+    # We had a failure, so update the check_run to indicate it
     rescue => exception
-        updated_check_run = @installation_client.patch(
-          "repos/#{@payload['repository']['full_name']}/check-runs/#{@payload['check_run']['id']}",
-          {
-            accept: 'application/vnd.github.antiope-preview+json',
-            name: 'RosiePi',
-            conclusion: "neutral",
-            completed_at: Time.now.utc.iso8601,
-            output: {
-              title: "RosiePi",
-              summary: "RosiePi suffered an internal error.",
-              text: exception.message
-            }
+      updated_check_run = @installation_client.patch(
+        "repos/#{@payload['repository']['full_name']}/check-runs/#{@payload['check_run']['id']}",
+        {
+          accept: 'application/vnd.github.antiope-preview+json',
+          name: 'RosiePi',
+          conclusion: "neutral",
+          completed_at: Time.now.utc.iso8601,
+          output: {
+            title: "RosiePi",
+            summary: "RosiePi suffered an internal error.",
+            text: exception.message
           }
-        )
-        raise
-      #puts "foo"
+        }
+      )
+      raise
     end
-
-
 
     # Saves the raw payload and converts the payload to JSON format
     def get_payload_request(request)
