@@ -1,5 +1,4 @@
 import os
-import tempfile
 
 import pytest
 
@@ -17,5 +16,4 @@ def app():
 def client(app):
     """ A test client for the app.
     """
-
     return app.test_client()

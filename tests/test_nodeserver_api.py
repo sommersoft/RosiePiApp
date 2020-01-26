@@ -21,17 +21,32 @@
 # THE SOFTWARE.
 #
 
+from datetime import datetime
 import json
 
 import pytest
 
 from flask import jsonify
 
+req_headers = {
+    'Authorization':'Signature key-id=test-key,algorithm="hmac-sha256",headers="(request-target) date",signature=foob4r=',
+    'Date': datetime.now().strftime('%Y-%m-%dT%H:%M:%S%Z')
+}
+
+def test_node_deny_no_http_signature(client):
+    """ Test node that does not have the required HTTP Signature
+        in the Authorization header.
+    """
+
+    response = client.get('/')
+
+    assert response.status_code == 401
+
 def test_node_status_returns_json(client):
     """ Test node status returning valid json.
     """
 
-    response = client.get('/status')
+    response = client.get('/status', headers=req_headers)
     ret_json = response.get_json()
 
     assert json.dumps(ret_json)
@@ -39,17 +54,17 @@ def test_node_status_returns_json(client):
 def test_node_status_return_info(client):
     """ Test node status returns proper info.
     """
-    response = client.get('/status')
+    response = client.get('/status', headers=req_headers)
     ret_json = response.get_json()
 
-    for item in ['node_name', 'busy']:
+    for item in ['node_name', 'busy', 'job_count']:
         assert item in ret_json
 
 def test_node_runtest_get_verb(client):
     """ Test node RunTest GET verb
     """
 
-    response = client.get('/run-test')
+    response = client.get('/run-test', headers=req_headers)
 
     assert response.status_code == 405
 
@@ -61,7 +76,7 @@ def test_node_runtest_post_success(client):
         'commit_sha': '123456abcdefg'
     }
 
-    response = client.post('/run-test', json=payload)
+    response = client.post('/run-test', json=payload, headers=req_headers)
 
     assert response.status_code == 200
 
@@ -71,7 +86,7 @@ def test_node_runtest_post_non_json(client):
 
     payload = 'null'
 
-    response = client.post('/run-test', data=payload)
+    response = client.post('/run-test', data=payload, headers=req_headers)
 
     assert response.status_code == 406
 
@@ -84,6 +99,6 @@ def test_node_runtest_post_no_commit_sha(client):
         'null': 'null'
     }
 
-    response = client.post('/run-test', json=payload)
+    response = client.post('/run-test', json=payload, headers=req_headers)
 
     assert response.status_code == 400
