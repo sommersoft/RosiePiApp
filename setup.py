@@ -9,5 +9,7 @@ setup(
     install_requires=[
         'flask',
         'jinja2',
+        'rq',
+        'redis'
     ]
 )
